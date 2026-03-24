@@ -5,7 +5,7 @@ import { useState, useCallback, useRef, KeyboardEvent, useEffect } from "react";
 import Editor from "@monaco-editor/react";
 
 // Ícones usados na interface
-import { Play, Terminal, Loader2, Clock, RotateCcw } from "lucide-react";
+import { Play, Terminal, Loader2, Clock, RotateCcw, Code } from "lucide-react";
 
 // Código padrão que aparece no editor
 const DEFAULT_CODE = `#include <iostream>
@@ -151,6 +151,7 @@ const Index = () => {
 
     try {
       const data = await executeCode(allInputs.join("\n"));
+        console.log("Resposta bruta da API Wandbox:", data);
 
       const elapsed = ((performance.now() - startTime) / 1000).toFixed(2);
       setExecutionTime(parseFloat(elapsed));
@@ -281,15 +282,21 @@ const Index = () => {
         <div className="flex items-center gap-2.5">
           <Terminal className="w-5 h-5 text-primary" />
           <h1 className="text-base font-semibold text-foreground tracking-tight">C++ Compiler</h1>
-          <span className="text-xs text-muted-foreground font-mono ml-1">Davis Developer</span>
+          <span className="text-xs text-muted-foreground font-mono ml-1 hidden md:block">Davis Developer</span>
         </div>
         <div className="flex items-center gap-3">
-          {executionTime !== null && (
-            <span className="flex items-center gap-1.5 text-xs text-muted-foreground font-mono">
-              <Clock className="w-3.5 h-3.5" />
-              {executionTime}s
-            </span>
-          )}
+          <div className="flex gap-x-6">
+              <span className="hidden md:flex items-center gap-1.5 text-xs text-muted-foreground font-mono">
+                <Code className="w-4 h-4" />
+                gcc 13.2.0
+              </span>
+            {executionTime !== null && (
+              <span className="flex items-center gap-1.5 text-xs text-muted-foreground font-mono">
+                <Clock className="w-3.5 h-3.5" />
+                {executionTime}s
+              </span>
+            )}
+          </div>
           <button
             onClick={resetConsole}
             className="inline-flex items-center p-2 rounded-md text-muted-foreground hover:text-foreground transition-colors"
